@@ -49,7 +49,11 @@ namespace ann_web.Controllers
     [Route("register-order")]
     public IActionResult registerOrder([FromBody]RegisterOrderModel data)
     {
-      return NoContent();
+      if (data.products.Count == 0)
+        return BadRequest("Danh sách sản phẩm đang rỗng");
+
+      var result = _service.registerOrder(data.products, data.order);
+      return Ok(result);
     }
   }
 }
