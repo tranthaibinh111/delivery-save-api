@@ -12,11 +12,15 @@ namespace ann_web.Services
 {
   class DeliverySaveService
   {
-    private String _token;
+    private bool _test;
+    private string _token;
+    private string _tokenDev;
 
     public DeliverySaveService()
     {
+      _test = true;
       _token = "25afFFFE67Be86FFEB81C1CC4cC7Acd386263A73";
+      _tokenDev = "93D2dc1B2FE8102d9eB98244aCd7d513D9db6760";
     }
 
     public SuggestionStreetResponseModel suggestionStreet(SuggestionStreetModel data)
@@ -56,10 +60,10 @@ namespace ann_web.Services
     {
       // Init token
       var headers = new WebHeaderCollection();
-      headers.Add("Token", _token);
+      headers.Add("Token", _test ? _tokenDev : _token);
 
       // Create url
-      var url = "https://services.giaohangtietkiem.vn/services/shipment/fee?";
+      var url = String.Format("https://{0}/services/shipment/fee?", _test ? "dev.ghtk.vn" : "services.giaohangtietkiem.vn");
       // pick_address_id
       if (!String.IsNullOrEmpty(data.pick_address_id))
         url += String.Format("&pick_address_id={0}", data.pick_address_id);
@@ -119,11 +123,11 @@ namespace ann_web.Services
     {
       // Init token
       var headers = new WebHeaderCollection();
-      headers.Add("Token", _token);
+      headers.Add("Token", _test ? _tokenDev : _token);
       headers.Add("Content-Type", "application/json");
 
       // Create url
-      var url = "https://services.giaohangtietkiem.vn/services/shipment/order/?ver=1.5";
+      var url = String.Format("https://{0}/services/shipment/order/?ver=1.5", _test ? "dev.ghtk.vn" : "services.giaohangtietkiem.vn");
       // Excute API
       HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
       request.Method = "POST";
